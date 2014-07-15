@@ -1,4 +1,4 @@
-#Kit Desenvolvimento IoT [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+#Kit Desenvolvimento IoT 4G [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 [![NPM](https://nodei.co/npm/kit-iot.png?downloads=true)](https://nodei.co/npm/kit-iot/)
 
