@@ -6,7 +6,7 @@ app.controller('mainCtrl', function ($scope, socket, $http, $location, Auth, Sto
     $scope.loading = true;
 
     $http.post('/login', {
-      name : $scope.name, email: $scope.email, token: $scope.token, pass: $scope.pass, tel: $scope.tel
+      name : $scope.name, email: $scope.email, usuario: $scope.usuario, password: $scope.password, token: $scope.token, apikey: $scope.apikey, tel: $scope.tel
     })
     .success(function (data, status, headers) {
 
@@ -40,7 +40,7 @@ app.controller('mainCtrl', function ($scope, socket, $http, $location, Auth, Sto
 
       } else {
         $scope.errors = $scope.mapErrors = $scope.error = null;
-        Auth.login($scope.token, $scope.name, $scope.email, $scope.tel);
+        Auth.login($scope.usuario, $scope.password, $scope.token, $scope.apikey, $scope.name, $scope.email, $scope.tel);
 
         $location.path('/map');
       }

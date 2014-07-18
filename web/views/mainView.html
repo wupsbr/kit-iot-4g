@@ -1,4 +1,4 @@
-<h1>Cadastre seu Kit IoT</h1>
+<h1>Cadastre seu Kit IoT 4G</h1>
 
 <div class="form-error" ng-show="error">
   <p>
@@ -28,8 +28,23 @@
     </li>
 
     <li>
+      <label for="usuario">Usuário*:</label>
+      <input type="text" ng-model="usuario" name="usuario" id="usuario" ng-class="{ error: mapErrors.usuario }" />
+    </li>
+
+    <li>
+      <label for="password">Senha*:</label>
+      <input type="text" ng-model="password" name="password" id="password" ng-class="{ error: mapErrors.password }" />
+    </li>
+
+    <li>
       <label for="token">Token*:</label>
       <input type="text" ng-model="token" name="token" id="token" ng-class="{ error: mapErrors.token }" />
+    </li>
+
+    <li>
+      <label for="apikey">API Key*:</label>
+      <input type="text" ng-model="apikey" name="apikey" id="apikey" ng-class="{ error: mapErrors.apikey }" />
     </li>
 
     <li class="form-error" ng-show="errors">
