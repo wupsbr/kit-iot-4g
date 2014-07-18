@@ -12,10 +12,12 @@ var routes = function (app) {
   //Login
   app.post('/login', function (req, res) {
     //validate the form
-    req.checkBody('name',  'Nome inválido').notEmpty();
-    req.checkBody('email', 'Email inválido').isEmail();
-    req.checkBody('tel',   'Celular inválido').isInt().len(9, 11);
-    req.checkBody('token', 'Token inválido').notEmpty().len(12, 12);
+    req.checkBody('name',     'Nome inválido').notEmpty();
+    req.checkBody('usuario',  'Usuário inválido').notEmpty();
+    req.checkBody('password', 'Senha inválido').notEmpty();
+    req.checkBody('email',    'Email inválido').isEmail();
+    req.checkBody('tel',      'Celular inválido').isInt().len(9, 11);
+    req.checkBody('token',    'Token inválido').notEmpty();
 
     var errors    = req.validationErrors(),
         mapErrors = req.validationErrors(true);
@@ -29,7 +31,7 @@ var routes = function (app) {
         if (!error && response.statusCode === 200) {
 
           request({
-            url   : URL +'/m2m/v2/services/'+ req.body.token +'/assets/'+ req.body.token,
+            url   : URL +'/m2m/v2/services/'+ req.body.token +'/assets/kit-iot-4g/',
             method: 'PUT',
             body  : JSON.stringify({ "UserProps": [
               { "name": "nome",  "value": req.body.name },
@@ -37,8 +39,18 @@ var routes = function (app) {
               { "name": "tel",   "value": req.body.tel }
             ] })
           }, function (e, r, b) {
-            //Save user token
-            t.saveId(req.body.token);
+
+            //Save user configuration
+            t.saveConfig({
+              "name":     req.body.name,
+              "usuario":  req.body.usuario,
+              "password": req.body.password,
+              "email":    req.body.email,
+              "tel":      req.body.tel,
+              "apikey":   req.body.apikey,
+              "token":    req.body.token
+            });
+
 
             res.send(body);
           });
@@ -69,13 +81,10 @@ var routes = function (app) {
   app.post('/lonLat', function (req, res) {
 
     request({
-      url   : URL +'/m2m/v2/services/'+ req.body.token +'/assets/'+ req.body.token,
+      url   : URL +'/m2m/v2/services/'+ req.body.token +'/assets/kit-iot-4g/',
       method: 'PUT',
       body  : req.body.userProps
     }, function (e, r, body) {
-
-      //Save token
-      t.saveId(req.body.token);
 
       res.send(body);
     });

@@ -7,31 +7,42 @@ var kitiot  = require('../lib/kit-iot'),
         trackingCode  : 'UA-5427757-50',
         packageName   : pkg.name,
         packageVersion: pkg.version
-    });
+    }),
+    args    = process.argv,
+    isConsole = false;
 
 //Initiate the kit
-var KitIoT = new kitiot();
+if (args[2] && args[2] === '-c') {
+  isConsole = true;
+}
+
+var KitIoT = new kitiot(isConsole);
 insight.track('init');
 
-//On io connection start the arduino
-KitIoT.io.on('connection', function (socket) {
-  KitIoT.connect();
-  insight.track('socket', 'connection');
+//If is not console start the io connection
+if (!KitIoT.isConsole) {
+  //On io connection start the arduino
+  KitIoT.io.on('connection', function (socket) {
+    KitIoT.connect();
+    insight.track('socket', 'connection');
 
-  //Start sending/saving data
-  socket.on('start', function () {
-    if (!KitIoT.token.getId()) {
-      KitIoT.logout();
+    KitIoT.start();
 
-    } else {
-      KitIoT.start();
-      insight.track('socket', 'start');
-    }
+    //Start sending/saving data
+    socket.on('start', function () {
+      if (!KitIoT.token.getToken()) {
+        KitIoT.logout();
+
+      } else {
+        KitIoT.start();
+        insight.track('socket', 'start');
+      }
+    });
+
+    //Stop sending/saving data
+    socket.on('stop', function () {
+      KitIoT.clearLoop(KitIoT.loop);
+      insight.track('socket', 'stop');
+    });
   });
-
-  //Stop sending/saving data
-  socket.on('stop', function () {
-    KitIoT.clearLoop(KitIoT.loop);
-    insight.track('socket', 'stop');
-  });
-});
+}
