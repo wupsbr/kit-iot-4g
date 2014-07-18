@@ -5,23 +5,25 @@
 /** ┌──────────────────────────────────┐                           **/
 /** │Revisão│ Descrição                           │    Data    │   **/
 /** │  01   │ Revisão inicial                     │ 14.01.2014 │   **/
+/** │  02   │ Removido DHT11 e SPL                │ 18.07.2014 │   **/
 /** │       │                                                      **/
 /** └──────────────────────────────────┘                           **/
 /********************************************************************/
 
-#include <dht11.h>
-dht11 DHT11;
+#include <CapacitiveSensor.h>
 
 /*
  * Test variables
  */
-#define DHT11PIN 2
-#define CHAVEPIN 3
-#define LUZPIN A0
-#define SPLPIN A1
+#define TMPPIN A0
+#define LUZPIN A1
+#define CHAVEPIN 5
+CapacitiveSensor cs_4_2 = CapacitiveSensor(4,2);
 unsigned int chave = 0;
+float tmp = 0;
+unsigned int cap = 0;
 unsigned int luz = 0;
-unsigned int spl = 0;
+
 /* 
  * End test variables
  */
@@ -38,6 +40,7 @@ char aux[4];
 
 void setup() {
   Serial.begin(115200);
+  cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);
 }
 
 void loop() {
@@ -92,13 +95,13 @@ void process() {
   int cmdid = atoi(cmd);
 
   switch (cmdid) {
-    case 1 : dWrite(pin,val);  break;
-    case 2 : dRead(pin,val);   break;
-    case 3 : aWrite(pin,val);  break;
-    case 4 : aRead(pin,val);   break;
-    case 5 : dht11Read(pin);   break;
-    case 99: toggleDebug(val); break;
-    default:                   break;
+    case 1 : dWrite(pin,val);     break;
+    case 2 : dRead(pin,val);      break;
+    case 3 : aWrite(pin,val);     break;
+    case 4 : aRead(pin,val);      break;
+    case 5 : capacitiveRead(pin); break;
+    case 99: toggleDebug(val);    break;
+    default:                      break;
   }
 }
 
@@ -230,21 +233,12 @@ int getPin(char *pin) {
 
 
 /*
- *  Dht11 read
+ * Capacitive Sensor read
  */
-void dht11Read(char *pin) {
-  Debug("dht11Read");
-  int p = getPin(pin);
-
-  if(p == -1) {
-    Debug("badpin");
-    return;
-  }
-
-  int chk = DHT11.read(atoi(pin));
-
-  char m[7];
-  sprintf(m, "%s::%d::%d", pin, DHT11.temperature, DHT11.humidity);
+void capacitiveRead(char *pin) {
+  Debug("capacitiveRead");
+  char m[8];
+  sprintf(m, "%s::%d", pin, cs_4_2.capacitiveSensor(30));
   Serial.println(m);
 }
 
@@ -264,31 +258,30 @@ void Debug(char *name) {
  */
 void Test() {
   for(int i=0; i<30; i++){
+    tmp = tmp + analogRead(TMPPIN);
     luz = luz + analogRead(LUZPIN);
-    spl = spl + analogRead(SPLPIN);
+    cap = cap + cs_4_2.capacitiveSensor(30);
   }
+  tmp = tmp/30;
   luz = luz/30;
-  spl = spl/30;
+  cap = cap/30;
+  
   chave = digitalRead(CHAVEPIN);
-  int chk = DHT11.read(DHT11PIN);
 
   Serial.print("Luz = ");
   Serial.print(luz);
-  Serial.print(" | ");
-  Serial.print("Spl = ");
-  Serial.print(spl);
   Serial.print(" | ");
   Serial.print("Chave = ");
   Serial.print(chave);
   Serial.print(" | ");
   Serial.print("Temperatura = ");
-  Serial.print((float)DHT11.temperature, 2);
+  Serial.print((float)tmp, 2);
   Serial.print(" | ");
-  Serial.print("Umidade = ");
-  Serial.print((float)DHT11.humidity, 2);
+  Serial.print("Capacidade = ");
+  Serial.print(cap);
   Serial.print('\n');
 
-  luz = spl = 0;
+  cap = luz = tmp = 0;
   
   delay(10);
 }
