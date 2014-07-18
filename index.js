@@ -7,14 +7,14 @@ var kitiot  = require('./lib/kit-iot'),
         packageVersion: pkg.version
     }),
     args    = process.argv,
-    console = false;
+    isConsole = false;
 
 //Initiate the kit
 if (args[2] && args[2] === '-c') {
-  console = true;
+  isConsole = true;
 }
 
-var KitIoT = new kitiot(console);
+var KitIoT = new kitiot(isConsole);
 insight.track('init');
 
 //If is not console start the io connection
@@ -28,7 +28,7 @@ if (!KitIoT.isConsole) {
 
     //Start sending/saving data
     socket.on('start', function () {
-      if (!KitIoT.token.getId()) {
+      if (!KitIoT.token.getToken()) {
         KitIoT.logout();
 
       } else {
