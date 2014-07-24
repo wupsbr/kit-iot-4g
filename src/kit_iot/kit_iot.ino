@@ -21,7 +21,7 @@
 CapacitiveSensor cs_4_2 = CapacitiveSensor(4,2);
 unsigned int chave = 0;
 float tmp = 0;
-unsigned int cap = 0;
+int cap = 0;
 unsigned int luz = 0;
 
 /* 

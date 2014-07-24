@@ -1,5 +1,5 @@
 {
-  "name": "kit-iot",
+  "name": "kit-iot-4g",
   "version": "0.2.0",
   "description": "Kit Desenvolvimento IoT V2 - Telefonica Vivo",
   "main": "index.js",
@@ -25,7 +25,8 @@
     "request": "~2.31.0",
     "serialport": "~1.2.5",
     "single-line-log": "^0.4.1",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "minimist": "^0.2.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
