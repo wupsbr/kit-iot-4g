@@ -3,6 +3,7 @@
 var kitiot  = require('../lib/kit-iot'),
     Insight = require('insight'),
     pkg     = require('../package.json'),
+    argv    = require('minimist')(process.argv.slice(2)),
     insight = new Insight({
         trackingCode  : 'UA-5427757-50',
         packageName   : pkg.name,
