@@ -1,6 +1,6 @@
 {
   "name": "kit-iot-4g",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Kit Desenvolvimento IoT V2 - Telefonica Vivo",
   "main": "index.js",
   "bin": "./bin/index.js",
